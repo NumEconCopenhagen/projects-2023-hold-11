@@ -1,7 +1,7 @@
 # \[Group name\]
 
 **Group members:**
-- A 
+- A Emma Gabriel
 - B Luka Weuder
 - C Casper Nielsen
 
