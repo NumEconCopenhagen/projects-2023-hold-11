@@ -1,9 +1,9 @@
 # \[Group name\]
 
 **Group members:**
-- A
+- A 
 - B
-- C
+- C Casper Nielsen
 
 This repository contains  
 1. Inaugural project. 
