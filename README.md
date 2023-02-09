@@ -1,8 +1,8 @@
 # \[Hold 11\]
 
 **Group members:**
-- Emma Gabriel 
-- B
+- A Emma Gabriel
+- B Luka Weuder
 - C Casper Nielsen
 
 This repository contains  
