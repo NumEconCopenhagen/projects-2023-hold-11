@@ -1,7 +1,7 @@
-# \[Group name\]
+# \[Hold 11\]
 
 **Group members:**
-- A
+- Emma Gabriel
 - B
 - C
 
