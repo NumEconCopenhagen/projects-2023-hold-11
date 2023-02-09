@@ -1,9 +1,9 @@
 # \[Hold 11\]
 
 **Group members:**
-- Emma Gabriel
+- Emma Gabriel 
 - B
-- C
+- C Casper Nielsen
 
 This repository contains  
 1. Inaugural project. 
