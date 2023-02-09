@@ -2,7 +2,7 @@
 
 **Group members:**
 - A
-- B
+- B Luka Weuder
 - C
 
 This repository contains  
