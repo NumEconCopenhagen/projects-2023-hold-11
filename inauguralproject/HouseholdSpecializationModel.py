@@ -122,11 +122,24 @@ class HouseholdSpecializationModelClass:
         """ solve model continously """
 
         pass    
-
+    
+    #selv skrevet denne kode
     def solve_wF_vec(self,discrete=False):
         """ solve model for vector of female wages """
+        par = self.par
+        sol = self.sol
+        for it, w in enumerate(par.wF_vec):
+            par.wF = w 
+            if discrete == True:
+                res = self.solve_discrete()
+            else:
+                res = self.solve()
+            sol.LM_vec[it] = res.LM
+            sol.LF_vec[it] = res.LF
+            sol.HM_vec[it] = res.HM
+            sol.HF_vec[it] = res.HF
 
-        pass
+    ######################################## 
 
     def run_regression(self):
         """ run regression """
