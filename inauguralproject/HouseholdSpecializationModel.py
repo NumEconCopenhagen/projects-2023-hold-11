@@ -118,11 +118,36 @@ class HouseholdSpecializationModelClass:
 
         return opt
 
+
     def solve(self,do_print=False):
         """ solve model continously """
+        par = self.par
+        sol = self.sol
+        opt = SimpleNamespace()
 
-        pass    
+        def objective(x):
+            LM, LF, HF, HM = x
+            value = self.calc_utility(*x) # * unpacks
+            return value
+        
     
+        obj = lambda x: - objective(x)
+        guess = [(0,0,0,0)]
+        bounds = [(0,24),(0,24),(0,24),(0,24)]
+        #constraints = # add constraints
+        # ii. optimizer
+    
+        res = optimize.minimize(obj,
+                                 guess,
+                                 method='SLSQP',
+                                 bounds=bounds) # add contraints
+        opt.LM = res.x[0]
+        opt.HM = res.x[1]
+        opt.LF = res.x[2]
+        opt.HF = res.x[3]
+
+        return opt
+
     #selv skrevet denne kode
     def solve_wF_vec(self,discrete=False):
         """ solve model for vector of female wages """
