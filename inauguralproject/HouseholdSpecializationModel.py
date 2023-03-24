@@ -131,16 +131,24 @@ class HouseholdSpecializationModelClass:
             return value
         
     
-        obj = lambda x: - objective(x)
+        obj = lambda x: - objective(x) # we call a minimizer later, but we want to maximize so minus in front of obj. func. 
         guess = [(0,0,0,0)]
-        bounds = [(0,24),(0,24),(0,24),(0,24)]
-        #constraints = # add constraints
+        bounds = [(0,24),(0,24),(0,24),(0,24)] 
+        def con1(x):
+            LM, HM= x
+            return 24 - (LM + HM) # TM = LM + HM constraint - not to be broken
+        def con2(x):
+            LF, HF = x
+            return 24 - (LF + HF) # TF = LF + HF contraint - not to be broken
+        
+        contraints = ({'type':'ineq', 'fun': con1},{'type':'ineq', 'fun': con2})
         # ii. optimizer
     
         res = optimize.minimize(obj,
                                  guess,
-                                 method='SLSQP',
-                                 bounds=bounds) # add contraints
+                                 method='Powell',
+                                 bounds=bounds,
+                                 constraints = contraints) # i don't know why this works for Powell but not for SLSQP. Actually i don't know why this works at all
         opt.LM = res.x[0]
         opt.HM = res.x[1]
         opt.LF = res.x[2]
