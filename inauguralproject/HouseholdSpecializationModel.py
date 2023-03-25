@@ -187,5 +187,34 @@ class HouseholdSpecializationModelClass:
     
     def estimate(self,alpha=None,sigma=None):
         """ estimate alpha and sigma """
+        par = self.par
+        sol = self.sol
+        opt = SimpleNamespace()
 
-        pass
+        # values from study
+        beta0_study= 0.4
+        beta1_study= -0.1
+
+        def objective(x):
+            beta0,beta1 = x
+            value = (beta0_study-self.run_regression(x[0]))**2 - (beta1_study-self.run_regression(x[1]))**2
+            return value
+        
+        obj = lambda x: objective(x)
+
+
+        # call minimizer
+        res = optimize.minimize(obj, 
+                                args=(self.alpha, self.sigma))
+        opt.beta0 = res.x[0]
+        opt.beta1 = res.x[1]
+        return opt
+    
+
+        # obj to be minimized
+       # def objective(self, x):
+            #beta0, beta1 = x
+           # value = (beta0_study-self.beta0)**2+(beta1_study-self.beta1)**2
+            #return value
+        #obj = lambda x: objective(x)
+        
