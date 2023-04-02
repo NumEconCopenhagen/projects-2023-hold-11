@@ -211,7 +211,6 @@ class HouseholdSpecializationModelClass:
             value = (beta0_study-sol.beta0)**2 + (beta1_study-sol.beta1)**2
             return value
 
-        
         obj = lambda x: objective(x)
         
         # call minimizer and store results
@@ -224,7 +223,7 @@ class HouseholdSpecializationModelClass:
 
         if do_print:
             for k,v in opt.__dict__.items():
-                print(f'{k} = {v:6.4f}')
+                print(f'optimal {k} = {v:6.4f}')
 
         return opt
     
