@@ -132,7 +132,7 @@ class HouseholdSpecializationModelClass:
         
     
         obj = lambda x: - objective(x) # we call a minimizer later, but we want to maximize so minus in front of obj. func. 
-        guess = [(0,0,0,0)]
+        guess = [(3,5.0,5.5,4.0)]
         bounds = [(0,24),(0,24),(0,24),(0,24)] 
         def con1(x):
             LM, HM= x
@@ -146,9 +146,10 @@ class HouseholdSpecializationModelClass:
     
         res = optimize.minimize(obj,
                                  guess,
-                                 method='Powell',
+                                 method='Nelder-Mead',
                                  bounds=bounds,
-                                 constraints = contraints) # i don't know why this works for Powell but not for SLSQP. Actually i don't know why this works at all
+                                 #constraints = contraints
+                                 ) # i don't know why this works for Powell but not for SLSQP.
         opt.LM = res.x[0]
         opt.HM = res.x[1]
         opt.LF = res.x[2]
@@ -156,7 +157,7 @@ class HouseholdSpecializationModelClass:
 
         return opt
 
-    #selv skrevet denne kode
+
     def solve_wF_vec(self,discrete=False):
         """ solve model for vector of female wages """
         par = self.par
@@ -172,8 +173,7 @@ class HouseholdSpecializationModelClass:
             sol.HM_vec[it] = res.HM
             sol.HF_vec[it] = res.HF
 
-    ######################################## 
-
+   
     def run_regression(self):
         """ run regression """
 
@@ -185,36 +185,46 @@ class HouseholdSpecializationModelClass:
         A = np.vstack([np.ones(x.size),x]).T
         sol.beta0,sol.beta1 = np.linalg.lstsq(A,y,rcond=None)[0]
     
-    def estimate(self,alpha=None,sigma=None):
+    def estimate(self,alpha=None,sigma=None,do_print=False):
         """ estimate alpha and sigma """
         par = self.par
         sol = self.sol
         opt = SimpleNamespace()
+        model = HouseholdSpecializationModelClass()
+        model.par.alpha = alpha
+        model.par.sigma = sigma
 
         # values from study
         beta0_study= 0.4
         beta1_study= -0.1
 
-        def objective(x):
-            beta0,beta1 = x
-            value = (beta0_study-self.run_regression(x[0]))**2 - (beta1_study-self.run_regression(x[1]))**2
-            return value
-        
-        obj = lambda x: objective(x)
-
-
-        # call minimizer
-        res = optimize.minimize(obj, 
-                                args=(self.alpha, self.sigma))
-        opt.beta0 = res.x[0]
-        opt.beta1 = res.x[1]
-        return opt
-    
+        # some initial guess for alpha and sigma values that minimize obj function
+        alpha_guess = 0.5
+        sigma_guess = 0.5
+        guess = (alpha_guess, sigma_guess)
 
         # obj to be minimized
-       # def objective(self, x):
-            #beta0, beta1 = x
-           # value = (beta0_study-self.beta0)**2+(beta1_study-self.beta1)**2
-            #return value
-        #obj = lambda x: objective(x)
+        def objective(x):
+            par.alpha, par.sigma = x
+            self.solve_wF_vec()
+            self.run_regression()
+            value = (beta0_study-sol.beta0)**2 + (beta1_study-sol.beta1)**2
+            return value
+
         
+        obj = lambda x: objective(x)
+        
+        # call minimizer and store results
+        res = optimize.minimize(obj,
+                                x0=guess,
+                                method='Nelder-Mead'
+                                )
+        opt.alpha = res.x[0]
+        opt.sigma = res.x[1]
+
+        if do_print:
+            for k,v in opt.__dict__.items():
+                print(f'{k} = {v:6.4f}')
+
+        return opt
+    
