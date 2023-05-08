@@ -10,14 +10,14 @@ class StackelbergEquilibriumSolver:
 
         par = self.par = SimpleNamespace()
 
-        par.a = 1 # demand for good 1
-        par.b = 1 # demand for good 2
-        par.Q = 20 # demand for p=0
+        par.a = 1 # coefficiant for good 1
+        par.b = 1 # coefficiant for good 2
+        par.d = 20 # demand for p=0
         par.c  = [0,0] # marginal cost
         
     def demand_function(self, q1, q2):
         par = self.par
-        demand = par.Q-par.a*q1-par.b*q2 # inverted demand function
+        demand = par.d-par.a*q1-par.b*q2 # inverted demand function
         return demand
 
     def cost_function(self, q, c):
@@ -42,7 +42,7 @@ class StackelbergEquilibriumSolver:
         res = optimize.minimize(obj, initial_guess)
         q1 = res.x
         q2 = self.reaction(q1, par.c[1])
-        return q1,q2
+        return print(f'q1 = {q1} q2 = {q2}') 
 
 
 def plotting_function(x, y, x_label =None, y_label =None, x_lim = None, y_lim = None, labels = None, title = None, label_size = None, title_size = None):
@@ -85,15 +85,14 @@ def plotting_function(x, y, x_label =None, y_label =None, x_lim = None, y_lim = 
         ax.set_xlim(x_lim)
     plt.show()
 
-def plot(a = 1, b = 1, Q = 20, c2= 0):
+def plot(a = 1, b = 1, d = 20):
     model = StackelbergEquilibriumSolver()
     # Update model parameters
     model.par.a = a
     model.par.b = b
-    model.par.Q = Q
-    model.par.c = [0, c2]
+    model.par.d = d
     # x axis grid
-    range_c = np.arange(0,0.51,0.01)
+    range_c = np.arange(0,1,0.1)
     # y axis grid
     range_q = np.zeros((range_c.size,2))
     for it, i in enumerate(range_c):
@@ -107,7 +106,7 @@ def plot(a = 1, b = 1, Q = 20, c2= 0):
                   x_label = '$c_1$',
                   y_label = '$q$',
                   labels = ['Company 1','Company 2'], 
-                  title = 'Nash equilibrium quantities for differences in production costs', 
+                  title = 'Stackelberg equilibrium quantities for differences in production costs', 
                   label_size = None, 
                   title_size = 16)
     
@@ -119,20 +118,19 @@ def plot_interact():
                  b=widgets.FloatSlider(
                      description="b", min=1, max=5, step=0.25, value=1),
                  x0=widgets.FloatSlider(
-                     description="Q", min=1, max=50, step=0.5, value=20),
+                     description="d", min=1, max=50, step=0.5, value=20),
                  c2=widgets.FloatSlider(
                      description="c2", min=0, max=5, step=0.1, value=0)
 
     );
 
 
-def plot2(a = 1, b = 1, Q = 20, c1 = 0, c2= 0):
+def plot2(a = 1, b = 1, d = 20):
     model = StackelbergEquilibriumSolver()
     # Update model parameters
     model.par.a = a
     model.par.b = b
-    model.par.Q = Q
-    model.par.c = [c1, c2]
+    model.par.d = d
     # Solve Equilibrium
     model.solve_eq()
     # x axis grid
@@ -153,7 +151,7 @@ def plot2(a = 1, b = 1, Q = 20, c1 = 0, c2= 0):
                 x_lim = (0,10),
                 y_lim = (0,10),
                 labels = ['Company 1','Company 2'], 
-                title = 'Nash equilibrium quantities', 
+                title = 'Stackelberg equilibrium quantities', 
                 label_size = None, 
                 title_size = 16)
 def plot2_interact():
@@ -164,10 +162,6 @@ def plot2_interact():
                     b=widgets.FloatSlider(
                         description="b", min=1, max=5, step=0.25, value=1),
                     x0=widgets.FloatSlider(
-                        description="Q", min=1, max=50, step=0.5, value=20),
-                    c1=widgets.FloatSlider(
-                        description="c1", min=0, max=5, step=0.1, value=0),
-                    c2=widgets.FloatSlider(
-                        description="c2", min=0, max=5, step=0.1, value=0)
+                        description="d", min=1, max=50, step=0.5, value=20)
 
     );
