@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from types import SimpleNamespace
 import ipywidgets as widgets
 
-class CournotNashEquilibriumSolver:
+class StackelbergEquilibriumSolver:
     def __init__(self):
         """ setup model """
 
@@ -12,12 +12,12 @@ class CournotNashEquilibriumSolver:
 
         par.a = 1 # demand for good 1
         par.b = 1 # demand for good 2
-        par.X = 20 # demand for p=0
+        par.Q = 20 # demand for p=0
         par.c  = [0,0] # marginal cost
         
     def demand_function(self, q1, q2):
         par = self.par
-        demand = par.X-par.a*q1-par.b*q2 # inverted demand function
+        demand = par.Q-par.a*q1-par.b*q2 # inverted demand function
         return demand
 
     def cost_function(self, q, c):
@@ -85,12 +85,12 @@ def plotting_function(x, y, x_label =None, y_label =None, x_lim = None, y_lim = 
         ax.set_xlim(x_lim)
     plt.show()
 
-def plot(a = 1, b = 1, X = 20, c2= 0):
-    model = CournotNashEquilibriumSolver()
+def plot(a = 1, b = 1, Q = 20, c2= 0):
+    model = StackelbergEquilibriumSolver()
     # Update model parameters
     model.par.a = a
     model.par.b = b
-    model.par.X = X
+    model.par.Q = Q
     model.par.c = [0, c2]
     # x axis grid
     range_c = np.arange(0,0.51,0.01)
@@ -119,19 +119,19 @@ def plot_interact():
                  b=widgets.FloatSlider(
                      description="b", min=1, max=5, step=0.25, value=1),
                  x0=widgets.FloatSlider(
-                     description="X", min=1, max=50, step=0.5, value=20),
+                     description="Q", min=1, max=50, step=0.5, value=20),
                  c2=widgets.FloatSlider(
                      description="c2", min=0, max=5, step=0.1, value=0)
 
     );
 
 
-def plot2(a = 1, b = 1, X = 20, c1 = 0, c2= 0):
-    model = CournotNashEquilibriumSolver()
+def plot2(a = 1, b = 1, Q = 20, c1 = 0, c2= 0):
+    model = StackelbergEquilibriumSolver()
     # Update model parameters
     model.par.a = a
     model.par.b = b
-    model.par.X = X
+    model.par.Q = Q
     model.par.c = [c1, c2]
     # Solve Equilibrium
     model.solve_eq()
@@ -164,7 +164,7 @@ def plot2_interact():
                     b=widgets.FloatSlider(
                         description="b", min=1, max=5, step=0.25, value=1),
                     x0=widgets.FloatSlider(
-                        description="X", min=1, max=50, step=0.5, value=20),
+                        description="Q", min=1, max=50, step=0.5, value=20),
                     c1=widgets.FloatSlider(
                         description="c1", min=0, max=5, step=0.1, value=0),
                     c2=widgets.FloatSlider(
