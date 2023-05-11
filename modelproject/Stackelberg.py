@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from types import SimpleNamespace
 import ipywidgets as widgets
 
+
 class StackelbergEquilibriumSolver:
     def __init__(self):
         """ setup model """
@@ -13,7 +14,7 @@ class StackelbergEquilibriumSolver:
         par.a = 1 # coefficiant for good 1
         par.b = 1 # coefficiant for good 2
         par.d = 20 # demand for p=0
-        par.c  = [0,0] # marginal cost
+        par.c  = [2,2] # marginal cost
         
     def demand_function(self, q1, q2):
         par = self.par
@@ -42,7 +43,30 @@ class StackelbergEquilibriumSolver:
         res = optimize.minimize(obj, initial_guess)
         q1 = res.x
         q2 = self.reaction(q1, par.c[1])
-        return print(f'q1 = {q1} q2 = {q2}') 
+        return print(f'q1 = {q1} q2 = {q2}')
+        
+    
+def sim(a = 1, b = 1, d = 20): # work on this
+    N = 100
+    q1_values = np.empty(N)
+    q2_values = np.empty(N)
+    model = StackelbergEquilibriumSolver()
+    # Update model parameters
+    model.par.a = a
+    model.par.b = b
+    model.par.d = d
+    # Solve Equilibrium for different costs
+    # x axis grid
+    grid = np.linspace(0,10,N)
+    # y axis grid
+    range_q = np.zeros((grid.size,2))
+    for it, i in enumerate(grid):
+        # update cost function for company 1
+        # find equilibrium quantities
+        range_q[it,0] = model.reaction(i,model.par.c[0])
+        range_q[it,1] = model.reaction(range_q[it,0],model.par.c[1])
+    return q1_values,q2_values
+
 
 
 def plotting_function(x, y, x_label =None, y_label =None, x_lim = None, y_lim = None, labels = None, title = None, label_size = None, title_size = None):
@@ -165,3 +189,4 @@ def plot2_interact():
                         description="d", min=1, max=50, step=0.5, value=20)
 
     );
+
