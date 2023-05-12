@@ -46,7 +46,7 @@ class StackelbergEquilibriumSolver:
         return print(f'q1 = {q1} q2 = {q2}')
         
     
-def sim(a = 1, b = 1, d = 20): # work on this
+def sim(a = 1, b = 1, d = 20): # work on this This is another attept at trying to iterate over a costs list and output values of q1 anf q2. Does not work at the moment. 
     N = 100
     q1_values = np.empty(N)
     q2_values = np.empty(N)
@@ -61,12 +61,10 @@ def sim(a = 1, b = 1, d = 20): # work on this
     # y axis grid
     range_q = np.zeros((grid.size,2))
     for it, i in enumerate(grid):
-        # update cost function for company 1
-        # find equilibrium quantities
-        range_q[it,0] = model.reaction(i,model.par.c[0])
-        range_q[it,1] = model.reaction(range_q[it,0],model.par.c[1])
-    return q1_values,q2_values
-
+        
+    #return q1_values,q2_values
+        pass 
+    pass 
 
 
 def plotting_function(x, y, x_label =None, y_label =None, x_lim = None, y_lim = None, labels = None, title = None, label_size = None, title_size = None):
