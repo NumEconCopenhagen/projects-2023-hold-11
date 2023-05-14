@@ -52,7 +52,7 @@ def plot_optimal_quantities(c=0, d=20, c_min = 1, c_max = 20, num_points=500):
         Returns:
             2d plot
     """
-    # Define the range of d values to consider
+    # Define the range of c values to consider
     c_values = np.linspace(c_min, c_max, num_points)
 
     # Initialize arrays to store the optimal quantities
