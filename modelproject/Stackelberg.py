@@ -8,35 +8,46 @@ import ipywidgets as widgets
 class StackelbergDuopoly:
     def __init__(self, c, d):
         """Create Model"""
-        self.c = c # marginal cost
-        self.d = d # y-intercept of demand function / total demand when price is zero
-
-
+        self.c = c  # marginal cost
+        self.d = d  # y-intercept of demand function / total demand when price is zero
 
     # Profit_f is the follower firm
     def profit_f(self, q1, q2):
-        return (self.d - (q1 + q2) - self.c)*q1 
-    
-    #Profit_l is the leader firm
-    def profit_l(self, q1, q2):
-        return (self.d - (q2 + q1) - self.c)*q2 
+        return (self.d - (q1 + q2) - self.c) * q1
 
-    #reaction of follower
+    # Profit_l is the leader firm
+    def profit_l(self, q1, q2):
+        return (self.d - (q2 + q1) - self.c) * q2
+
+    # Reaction of follower
     def R_f(self, q2):
         res = optimize.minimize(lambda q1: -self.profit_f(q1, q2), x0=0, bounds=[(0, np.inf)], method='Nelder-Mead')
         return res.x[0]
 
-    #reaction of leader
+    # Reaction of leader
     def R_l(self, q1):
         res = optimize.minimize(lambda q2: -self.profit_l(q1, q2), x0=0, bounds=[(0, np.inf)], method='Nelder-Mead')
         return res.x[0]
-    
-    #qf is quantity supplied of the follower, and ql is the quantity supplied of the leader. 
+
+    # Get optimal quantities using backwards induction
     def get_optimal_quantities(self):
-        ql_opt = self.R_l(0)
-        qf_opt = self.R_f(ql_opt)
-        return qf_opt, ql_opt
-    
+        # Step 1: Solve follower's reaction given any quantity produced by the leader
+        def follower_reaction(q2):
+            return self.R_f(q2)
+
+        # Step 2: Maximize leader's profit function using follower's reaction
+        def leader_profit(q2):
+            q1 = follower_reaction(q2)
+            return self.profit_l(q1, q2)
+
+        res = optimize.minimize(lambda q2: -leader_profit(q2), x0=0, bounds=[(0, np.inf)], method='Nelder-Mead')
+        q2_opt = res.x[0]
+
+        # Step 3: Find optimal quantity for the follower
+        q1_opt = follower_reaction(q2_opt)
+
+        return q1_opt, q2_opt
+
 
 def plot_optimal_quantities(c=0, d=20, c_min = 1, c_max = 20, num_points=500):
     """
