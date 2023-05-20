@@ -60,6 +60,8 @@ class HouseholdSpecializationModelClass:
             H = HM**(1-par.alpha)*HF**par.alpha
         elif par.sigma == 0:
             H= np.minimum(HM, HF)
+        elif par.sigma == 0.1: #new 
+            H= (1-par.alpha)*HM + par.alpha*HF + HM*HF
         else: 
             H = ((1-par.alpha)*HM**((par.sigma-1)/par.sigma)+par.alpha*HF**((par.sigma-1)/par.sigma))**(par.sigma/(par.sigma-1))
 
@@ -131,7 +133,7 @@ class HouseholdSpecializationModelClass:
             return value
         
     
-        obj = lambda x: - objective(x) # we call a minimizer later, but we want to maximize so minus in front of obj. func. 
+        obj = lambda x: - 100*objective(x) #We make a positive monotone transformation, in order to ensure the stability of the SLSQP method, which is sensitive to starting values. we call a minimizer later, but we want to maximize so minus in front of obj. func. 
         guess = [(3,5.0,5.5,4.0)]
         bounds = [(0,24),(0,24),(0,24),(0,24)] 
         def con1(x):
@@ -142,14 +144,13 @@ class HouseholdSpecializationModelClass:
             return 24 - (LF + HF) # TF = LF + HF contraint - not to be broken
         
         contraints = ({'type':'ineq', 'fun': con1},{'type':'ineq', 'fun': con2})
-        # ii. optimizer
-    
+
+        #optimizer
         res = optimize.minimize(obj,
                                  guess,
-                                 method='Nelder-Mead',
-                                 bounds=bounds,
-                                 #constraints = contraints
-                                 ) # i don't know why this works for Powell but not for SLSQP.
+                                 method='SLSQP',
+                                 bounds=bounds 
+                                 )
         opt.LM = res.x[0]
         opt.HM = res.x[1]
         opt.LF = res.x[2]
