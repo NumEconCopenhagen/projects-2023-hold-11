@@ -6,18 +6,19 @@ import ipywidgets as widgets
 
 
 class StackelbergDuopoly:
-    def __init__(self, c, d):
+    def __init__(self, c, d,n):
         """Create Model"""
         self.c = c  # marginal cost
         self.d = d  # y-intercept of demand function / total demand when price is zero
+        self.n = n 
 
-    # Profit_f is the follower firm
+    # Profit_f is the follower firm. In the code, q1 is the quantity of the follower.
     def profit_f(self, q1, q2):
-        return (self.d - (q1 + q2) - self.c) * q1
+        return (self.d - (q1 + q2) - self.c**self.n) * q1
 
-    # Profit_l is the leader firm
+    # Profit_l is the leader firm. In the code, q2 is the quantity of the leader.
     def profit_l(self, q1, q2):
-        return (self.d - (q2 + q1) - self.c) * q2
+        return (self.d - (q2 + q1) - self.c**self.n) * q2
 
     # Reaction of follower
     def R_f(self, q2):
@@ -49,16 +50,17 @@ class StackelbergDuopoly:
         return q1_opt, q2_opt
 
 
-def plot_optimal_quantities(c=0, d=20, c_min = 1, c_max = 20, num_points=500):
+def plot_optimal_quantities(n=1,c=0, d=20, c_min = 1, c_max = 20, num_points=500):
     """
     Plots the Stackelberg duopoly quantities as a function of marginal costs.
 
         Parameters:
-            d (int): Total demand when price is zero
-            c (int): Marginal cost, this can really be anything and will not change the output, only needed to make it run. 
-            c_min (int): Where to start plot 
-            c_max (int): Where to end plot
-            num_points (int): How many points to create in the plot 
+            n (float): power of marginal cost function
+            d (float): Total demand when price is zero
+            c (float): Marginal cost, this can really be anything and will not change the output, only needed to make it run. 
+            c_min (float): Where to start marginal cost
+            c_max (float): Where to end marignal costs
+            num_points (float): How many points to create in the plot 
 
         Returns:
             2d plot
@@ -71,7 +73,7 @@ def plot_optimal_quantities(c=0, d=20, c_min = 1, c_max = 20, num_points=500):
     ql_values = np.zeros_like(c_values)
 
     # Create a StackelbergDuopoly object with fixed parameters
-    model = StackelbergDuopoly(c=c, d=d)
+    model = StackelbergDuopoly(n=n, c=c, d=d)
 
     # Compute the optimal quantities for each value of c
     for i, c in enumerate(c_values):
@@ -87,3 +89,14 @@ def plot_optimal_quantities(c=0, d=20, c_min = 1, c_max = 20, num_points=500):
     plt.ylabel('Quantity')
     plt.legend()
     plt.show()
+
+def interactive_plot():
+
+    widgets.interact(plot_optimal_quantities,
+                     n = widgets.FloatSlider(min=0.1, max=10, value=2, description='n'),
+                     d = widgets.FloatSlider(min=1, max=100, value=20, description='d'),
+                     c = widgets.FloatSlider(min=1, max=20, value=2, description='c'),
+
+    
+
+);
