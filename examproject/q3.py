@@ -6,6 +6,13 @@ import sympy as sm
 from scipy import optimize
 from scipy.optimize import minimize
 
+def griewank(x):
+    return griewank_(x[0],x[1])
+    
+def griewank_(x1,x2):
+    A = x1**2/4000 + x2**2/4000
+    B = np.cos(x1/np.sqrt(1))*np.cos(x2/np.sqrt(2))
+    return A-B+1
 
 
 # Define parameters
@@ -14,9 +21,25 @@ tol = 1e-8
 K_underline = 10
 K = 1000
 
+
 def algorithm(K_underline, K, bounds, tol, figure_number=1):
+    """Implementation of global optimizer with refined multi-start strategy
+
+    Parameters
+    ----------
+    K_underline : int
+        Number of iterations before the refined multi-start strategy is applied
+        K : int
+        Maximum number of iterations
+        bounds : list
+        Bounds for the uniform distribution
+        tol : float
+        Tolerance level
+        figure_number : int
+        Figure number for the plot
+        """
     # set seed
-    np.random.seed(19)
+    np.random.seed(1986)
 
     # Initialize x_star and empty list for storing x_k0
     x_star = None
