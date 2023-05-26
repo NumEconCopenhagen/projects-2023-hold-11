@@ -45,7 +45,7 @@ def algorithm(K_underline, K, bounds, tol, figure_number=1):
     x_star = None
     x_k0_all = [] 
 
-    # Implement algorithm
+    # Algorithm
     for k in range(K):
         # Step 3.A: Draw a random initial guess x_k
         x_k = np.random.uniform(bounds[0], bounds[1], 2)
