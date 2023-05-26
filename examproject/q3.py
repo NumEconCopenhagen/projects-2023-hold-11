@@ -37,7 +37,7 @@ def algorithm(K_underline, K, bounds, tol, figure_number=1):
         Tolerance level
         figure_number : int
         Figure number for the plot
-        """
+    """
     # set seed
     np.random.seed(1986)
 
