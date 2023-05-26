@@ -3,6 +3,7 @@ import numpy as np
 def H2(rho, iota, sigma_epsilon, R, eta, w, K):
     # Parameters
     delta = 0.05  # Threshold value for policy change
+    
     # set seed
     np.random.seed(1986)
 

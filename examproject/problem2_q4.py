@@ -53,7 +53,7 @@ def H3(rho, iota, sigma_epsilon, R, eta, w, K):
     # plotting H as a function of delta
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
-    ax.plot(delta_values, ex_ante_values, label="Ex Ante Expected Value (H)")
+    ax.plot(delta_values, ex_ante_values, label="Figure 4: Ex Ante Expected Value (H)")
     ax.set_xlabel("Delta")
     ax.set_ylabel("Ex Ante Expected Value (H)")
     ax.set_title("Ex Ante Expected Value (H) as a Function of Delta")

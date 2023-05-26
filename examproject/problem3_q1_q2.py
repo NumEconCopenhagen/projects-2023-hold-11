@@ -22,7 +22,7 @@ K_underline = 10
 K = 1000
 
 
-def algorithm(K_underline, K, bounds, tol, figure_number=1):
+def algorithm(K_underline, K, bounds, tol, figure_number='X'):
     """Implementation of global optimizer with refined multi-start strategy
 
     Parameters
@@ -77,7 +77,7 @@ def algorithm(K_underline, K, bounds, tol, figure_number=1):
     plt.plot(x_k0_all[:, 1], label='x2')
     plt.xlabel('Iteration')
     plt.ylabel('Initial guess')
-    plt.title(f'Figure: {figure_number} Guesses by iteration. Converged by {k} iterations')
+    plt.title(f'Figure: {figure_number} Guesses by Iteration. Converged by {k} Iterations')
     plt.legend()
     plt.show()
 

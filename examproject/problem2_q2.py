@@ -54,6 +54,6 @@ def H(rho, iota, sigma_epsilon, R, eta, w, K):
     H = np.mean(ex_post_values) # return mean of ex post values
 
     
-    return print(f'Discounted sum of profit: {round(H, 3)}')
+    return print(f'Discounted sum of profits: {round(H, 3)}')
 
     
